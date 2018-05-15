@@ -1,7 +1,7 @@
 function [ corners ] = RectangleRecognition( im )
 %% Identify the largest rectangle in the captured image.
 %
-%  Input: the raw image, in grayscale or rgb
+%  Input: the raw image, in grayscale or rgb.
 %  Output: the corner coordinates of the recognized rectangle.
 %  Author: Yusen Fan, ysfan@umd.edu
 

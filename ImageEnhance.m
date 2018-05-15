@@ -3,7 +3,7 @@ function [ im_out ] = ImageEnhance( im, corners)
 %
 % Input: im: grayscale or color image.
 %        corners: corner coordinates of the file area.
-% Output: the transformed and enhanced image
+% Output: the transformed and enhanced image.
 % Author: Yusen Fan, ysfan@umd.edu
 
 %% first, change RGB to grayscale

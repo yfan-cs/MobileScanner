@@ -1,4 +1,8 @@
 %% mobile scanner script
+%
+% Author: Yusen Fan, ysfan@umd.edu
+%
+
 close all;
 
 % select image 

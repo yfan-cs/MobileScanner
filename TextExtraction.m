@@ -1,23 +1,27 @@
-function [ im_out ] = TextExtraction( original, distorted_RGB )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-
-%% Find Image Rotation and Scale Using Automated Feature Matching
-% This example shows how to automatically align two images that differ by a
-% rotation and a scale change.
-% It utilizes feature-based techniques to automate the registration process.
+function [ im_out ] = TextExtraction( original_RGB, distorted_RGB )
+%% extract the input from captured image and put it onto the reference form.
 %
-% In this example, you will use |detectSURFFeatures| and 
-% |vision.GeometricTransformEstimator| System object to recover rotation 
-% angle and scale factor of a distorted image. You will then transform the 
-% distorted image to recover the original image.
-
-% Copyright 1993-2014 The MathWorks, Inc. 
-
+% Input: original: reference form.
+%        distorted_RGB: captured image with student's input.
+% Output: input overlaid on reference image.
+% Assumption: the input's color is blue, and the reference text is black.
+% Author: Yusen Fan, ysfan@umd.edu
 
 %% Find Matching Features Between Images
 % Detect features in both images.
-distorted = rgb2gray(distorted_RGB);
+[~, ~, channel] = size(distorted_RGB);
+if channel == 1
+    distorted = distorted_RGB;
+elseif channel == 3
+    distorted = rgb2gray(distorted_RGB);
+end
+[~, ~, channel] = size(original_RGB);
+if channel == 1
+    original = original_RGB;
+elseif channel == 3
+    original = rgb2gray(original_RGB);
+end
+
 ptsOriginal  = detectSURFFeatures(original);
 ptsDistorted = detectSURFFeatures(distorted);
 
@@ -57,34 +61,6 @@ showMatchedFeatures(original,distorted, inlierOriginal, inlierDistorted);
 title('Matching points (inliers only)');
 legend('ptsOriginal','ptsDistorted');
 
-%% Solve for Scale and Angle
-% Use the geometric transform, TFORM, to recover 
-% the scale and angle. Since we computed the transformation from the
-% distorted to the original image, we need to compute its inverse to 
-% recover the distortion.
-%
-%  Let sc = scale*cos(theta)
-%  Let ss = scale*sin(theta)
-%
-%  Then, Tinv = [sc -ss  0;
-%                ss  sc  0;
-%                tx  ty  1]
-%
-%  where tx and ty are x and y translations, respectively.
-%
-
-%%
-% Compute the inverse transformation matrix.
-Tinv  = tform.invert.T;
-
-ss = Tinv(2,1);
-sc = Tinv(1,1);
-scale_recovered = sqrt(ss*ss + sc*sc);
-theta_recovered = atan2(ss,sc)*180/pi;
-
-%%
-% The recovered values should match your scale and angle values selected in
-% *Step 2: Resize and Rotate the Image*.
 
 %% Recover the Original Image
 % Recover the original image by transforming the distorted image.
@@ -99,6 +75,7 @@ mask = uint8(((red_ch < 1.1 * T) & (green_ch < 1.1 * T) & (blue_ch > T))*1);
 distorted(mask<1) = 0;
 im_out  = imwarp(distorted,tform,'OutputView',outputView);
 
+% put the input onto the reference form
 im_out(im_out<1) = original(im_out<1);
 
 %%
@@ -107,7 +84,6 @@ figure, imshowpair(original,im_out,'montage')
 
 
 end
-
 
 %% Reference
 % https://www.mathworks.com/help/images/examples/find-image-rotation-and-

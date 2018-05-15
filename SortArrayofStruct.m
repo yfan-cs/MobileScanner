@@ -16,4 +16,3 @@ function outStructArray = SortArrayofStruct( structArray, fieldName )
         disp ('Array of struct is empty');
     end      
 end
-% sort(A,'descend')

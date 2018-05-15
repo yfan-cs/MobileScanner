@@ -1,7 +1,7 @@
 function [ corners ] = RecFromLines( lines )
 %% Determine the largest rectangle surronded by the input lines
 %
-% Input: sorted lines according to theta
+% Input: sorted lines according to theta.
 % Output: corner coordinates of the rectangle, in clockwise or
 % anti-clockwise order.
 % Author: Yusen Fan, ysfan@umd.edu
