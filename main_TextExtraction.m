@@ -17,5 +17,10 @@ ref = imread(filename);
 % load image into matlab
 disto = imread(filename);
 
+% show reference image
+figure, imshow(ref), title('reference image');
+% show captured image
+figure, imshow(disto), title('captured image');
+
 % do the text extraction 
 im_out = TextExtraction( ref, disto );
